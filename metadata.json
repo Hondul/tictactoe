@@ -1,5 +1,6 @@
 {
   "name": "Gemini Tic Tac Toe",
   "description": "A classic Tic Tac Toe game where you can play against a friend or a challenging AI opponent powered by Google's Gemini API.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "prompt": ""
 }

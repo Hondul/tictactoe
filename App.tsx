@@ -12,11 +12,18 @@ const App: React.FC = () => {
   const [currentPlayer, setCurrentPlayer] = useState<Player>('X');
   const [isAiOpponent, setIsAiOpponent] = useState<boolean>(true);
   const [isAiThinking, setIsAiThinking] = useState<boolean>(false);
+  const [isApiKeyMissing, setIsApiKeyMissing] = useState<boolean>(false);
   
   const { winner, line: winningLine } = calculateWinner(board);
   const isDraw = board.every(square => square !== null) && !winner;
   const isGameEnd = !!winner || isDraw;
   const isGameStart = board.every(square => square === null);
+
+  useEffect(() => {
+    if (!process.env.API_KEY) {
+      setIsApiKeyMissing(true);
+    }
+  }, []);
 
   const handleRestart = useCallback(() => {
     setBoard(Array(9).fill(null));
@@ -85,7 +92,18 @@ const App: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 space-y-6 sm:space-y-8">
+    <div className="relative min-h-screen flex flex-col items-center justify-center p-4 space-y-6 sm:space-y-8">
+        {isApiKeyMissing && (
+          <div 
+            className="absolute top-4 left-4 right-4 bg-red-900/90 backdrop-blur-sm border border-red-700 text-red-200 px-4 py-3 rounded-lg shadow-lg text-center z-10"
+            role="alert"
+          >
+            <strong className="font-bold">Configuration Warning:</strong>
+            <span className="block sm:inline sm:ml-2">
+              Gemini API key not found. AI will use random moves.
+            </span>
+          </div>
+        )}
         <header className="text-center">
             <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight">
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-amber-500">
